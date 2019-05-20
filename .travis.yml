@@ -1,35 +1,29 @@
 language: go
-
 go:
-  - master
-
+- master
 install:
-  - git clone https://github.com/gohugoio/hugo.git
-  - cd hugo
-  - go install --tags extended
-  - cd -
-  - rm -rf public 2> /dev/null  # cleanup previous run
-  - chmod u+x add-hugo-theme.sh
-
+- git clone https://github.com/gohugoio/hugo.git
+- cd hugo
+- go install --tags extended
+- cd -
+- rm -rf public 2> /dev/null
+- chmod u+x add-hugo-theme.sh
 script:
-  - bash add-hugo-theme.sh
-  - hugo # generate!
-
+- bash add-hugo-theme.sh
+- hugo
 after_success:
-  - cp .travis.yml public  # all branches need this file
-  - cd public
-  - git init
-  - git config user.name "StevenHugo"
-  - git config user.email "StevenHugo"
-  - git add -A
-  - git commit -m "Update"
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
-
+- cp .travis.yml public
+- cd public
+- git init
+- git config user.name "StevenHugo"
+- git config user.email "StevenHugo"
+- git add -A
+- git commit -m "Update"
+- git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
 branches:
   only:
-    - master
-
+  - master
 env:
   global:
-    - GH_REF: github.com/StevenHugo/stevenhugo.github.io.git
-    - secure: Wccb9VyiGc29+OJnvSTLe6qBaTzEYgKRfqv2U+hMnKZEhNEQ72MvcukRwAQ9M7AaEdyyC5xmXKrG1pkkNeTLf3vvIOvInr2LDJ6zzViYXAQh4Q+DZ60SrfASUHMIKvFNNAwM/d6fh9QYIV/WpwnES5ylzMeVT1O47MAspZKzsZjDFSoL0Afldep5kgO1mLJCujwci51yk1dakE0ZlKDVcfvZePLfM60c0npyyZM62zIefZs0Yyo1IGCa3VokFTAeRJm5ht4Ap05KsDsto4hiRzQjLk5eCLz0kMN5YFb0i9DgJM8GS1t1s1t+iSXhyyGXFRxiS1thn8oWHebo67KH+5oNLPJpO/E1I0Wi0LZYc7cfsRnniMBV+4az8eIdKOH72iBdDer7bQ3IoeDKQQgaIekHOB04wajg9efrXLp5Puzk8wcSttl6Pol6jugEvDLPfHTNf8Ngb88v4Zink9Vuic5Fys4HmGvOnFm7wte0Vi0UrZq9ScVy2pU0uQKreH0C8u0XVBhnvbDVHlvz8HGALJgo3h+eL3yvyntzPcKsfyBotmRdVc0laqR98vIiWC0gsyU5/M2PSUNvj33oIb3Oih5wpu4UM0DYsfMiy5ZabphQTn0CDwHNwg269rTqKcpvkOh0wfBJg57rjJxG83ei4qnoEFxSabugmFG0pZWOZ2E=   # replace by the output from travis encrypt done earlier
+  - GH_REF: github.com/StevenHugo/stevenhugo.github.io.git
+  - secure: r54F7/ALupZ1wEeem/2yD9qFeyCE6x+fBVYHWGAHXhC4t1IGrTkvDDV/3OLjvr51q1Vp6aSik8K+iNjowClqCYLV8a1/0a3Xg1G+8u8bkW9xWXaqIvyrkNN/VKtzBvbS0jJ+FeWL0GNBtx+R5iMrk7pk4oRUQCAwvC+RWwWvR6WEvdYTUWiQ907lejmpdrlJ994+afg0weCthMKIMBp4UAGSZ2Pxu7cyigrTdPo7sp1lw7StRuZr94zfVTV9LfQbyWDW8tAoX5SkYTj5/SmDFlTfQVaBV5ck2FopvxdWb1IT6ryty71nDYZUE2fte7yMVE6nWzKjxpSe+eTn0tqYMNzhFvBOpYEbGONW+NOJVrBSatXy74UkHdxwABo6w/tQ5AJXM81ug1+gQsu/5KtzRAxMVt5JHnpU0eYOXQ2PSb91le1r3BXajHPeJ0ezPLUXgcw1JLztYjftOuE6NHTFdT8EJB27emSzyqLtE2rNY9poGPziiks31YWjsqeOgQmPWfqW22I+m/I40Xm/jcgHOphEN4MqOwHuR29ojUroODv+fu6YaVy5bzP3xpfNZ9gAv4VBanO6i1mocWOda+3Alo57HmwzibfmVhNYuT46wgD9MLWCJqjFjLcI4qYrBzqpd1wxyjceaUNNYkrpjPXUKWGkmJsIAWzg3gfFZDNLCY4=

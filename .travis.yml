@@ -1,18 +1,13 @@
- dist: xenial
- addons:
-   snaps:
-     - hugo
+language: go
 
-#language: go
-
-#go:
-  #- master
+go:
+  - master
 
 install:
-#  - git clone https://github.com/gohugoio/hugo.git
-  #- cd hugo
-  #- go install --tags extended
-  #- cd -
+  - git clone https://github.com/gohugoio/hugo.git
+  - cd hugo
+  - go install --tags extended
+  - cd -
   - rm -rf public 2> /dev/null  # cleanup previous run
   - chmod u+x add-hugo-theme.sh
 

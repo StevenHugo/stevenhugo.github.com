@@ -1,26 +1,33 @@
+dist: xenial
+language: python
+python: 3.7
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get -yq install apt-transport-https
+
 install:
-- wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p;q}}' | xargs wget
-- sudo dpkg -i hugo*.deb
-- rm -rf public 2> /dev/null
-- chmod u+x deploy.sh
+  - wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p;q}}' | xargs wget
+  - sudo dpkg -i hugo*.deb
+  - rm -rf public 2> /dev/null  # cleanup previous run
+  - chmod u+x add-hugo-theme.sh
 
 script:
-- sh deploy.sh
+  - bash add-hugo-theme.sh
+  - hugo -d  # generate!
 
-after_script:
-- cd public
-- git init
-- git config user.name "StevenHugo"
-- git config user.email "StevenHugo"
-- git add -A
-- git commit -m "Update"
-- git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
+after_success:
+  - cp .travis.yml public  # all branches need this file
+  - bash deploy.sh # run the deploy script
 
 branches:
   only:
-  - master
+    - master
 
 env:
   global:
-  - GH_REF: github.com/StevenHugo/stevenhugo.github.io.git
-  - secure: Wccb9VyiGc29+OJnvSTLe6qBaTzEYgKRfqv2U+hMnKZEhNEQ72MvcukRwAQ9M7AaEdyyC5xmXKrG1pkkNeTLf3vvIOvInr2LDJ6zzViYXAQh4Q+DZ60SrfASUHMIKvFNNAwM/d6fh9QYIV/WpwnES5ylzMeVT1O47MAspZKzsZjDFSoL0Afldep5kgO1mLJCujwci51yk1dakE0ZlKDVcfvZePLfM60c0npyyZM62zIefZs0Yyo1IGCa3VokFTAeRJm5ht4Ap05KsDsto4hiRzQjLk5eCLz0kMN5YFb0i9DgJM8GS1t1s1t+iSXhyyGXFRxiS1thn8oWHebo67KH+5oNLPJpO/E1I0Wi0LZYc7cfsRnniMBV+4az8eIdKOH72iBdDer7bQ3IoeDKQQgaIekHOB04wajg9efrXLp5Puzk8wcSttl6Pol6jugEvDLPfHTNf8Ngb88v4Zink9Vuic5Fys4HmGvOnFm7wte0Vi0UrZq9ScVy2pU0uQKreH0C8u0XVBhnvbDVHlvz8HGALJgo3h+eL3yvyntzPcKsfyBotmRdVc0laqR98vIiWC0gsyU5/M2PSUNvj33oIb3Oih5wpu4UM0DYsfMiy5ZabphQTn0CDwHNwg269rTqKcpvkOh0wfBJg57rjJxG83ei4qnoEFxSabugmFG0pZWOZ2E=
+    - GIT_DEPLOY_DIR=public # this is the default output dir of Hugo
+    - GIT_DEPLOY_BRANCH=master # this is the target branch, replace by gh-pages for Project Pages
+    - GIT_DEPLOY_USERNAME="StevenHugo" # dummy name
+    - GIT_DEPLOY_EMAIL=stevenhugo # replace by your email
+    - secure: Wccb9VyiGc29+OJnvSTLe6qBaTzEYgKRfqv2U+hMnKZEhNEQ72MvcukRwAQ9M7AaEdyyC5xmXKrG1pkkNeTLf3vvIOvInr2LDJ6zzViYXAQh4Q+DZ60SrfASUHMIKvFNNAwM/d6fh9QYIV/WpwnES5ylzMeVT1O47MAspZKzsZjDFSoL0Afldep5kgO1mLJCujwci51yk1dakE0ZlKDVcfvZePLfM60c0npyyZM62zIefZs0Yyo1IGCa3VokFTAeRJm5ht4Ap05KsDsto4hiRzQjLk5eCLz0kMN5YFb0i9DgJM8GS1t1s1t+iSXhyyGXFRxiS1thn8oWHebo67KH+5oNLPJpO/E1I0Wi0LZYc7cfsRnniMBV+4az8eIdKOH72iBdDer7bQ3IoeDKQQgaIekHOB04wajg9efrXLp5Puzk8wcSttl6Pol6jugEvDLPfHTNf8Ngb88v4Zink9Vuic5Fys4HmGvOnFm7wte0Vi0UrZq9ScVy2pU0uQKreH0C8u0XVBhnvbDVHlvz8HGALJgo3h+eL3yvyntzPcKsfyBotmRdVc0laqR98vIiWC0gsyU5/M2PSUNvj33oIb3Oih5wpu4UM0DYsfMiy5ZabphQTn0CDwHNwg269rTqKcpvkOh0wfBJg57rjJxG83ei4qnoEFxSabugmFG0pZWOZ2E=   # replace by the output from travis encrypt done earlier

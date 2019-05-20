@@ -3,12 +3,11 @@ language: go
 go:
   - "1.8"
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get -yq install apt-transport-https
-
 install:
-  - go get github.com/spf13/hugo 
+  - git clone https://github.com/gohugoio/hugo.git
+  - cd hugo
+  - go install --tags extended
+  - cd -
   - rm -rf public 2> /dev/null  # cleanup previous run
   - chmod u+x add-hugo-theme.sh
 

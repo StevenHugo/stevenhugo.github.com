@@ -1,7 +1,7 @@
 language: go
 
 go:
-  - "1.8"
+  - master
 
 install:
   - git clone https://github.com/gohugoio/hugo.git

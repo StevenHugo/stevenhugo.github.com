@@ -1,0 +1,24 @@
+language: go
+go:
+- master
+install:
+- go get github.com/spf13/hugo
+- chmod u+x deploy.sh
+before_script: 
+script:
+- sh deploy.sh
+after_script:
+- cd public
+- git init
+- git config user.name "StevenHugo"
+- git config user.email "StevenHugo"
+- git add -A
+- git commit -m "Update"
+- git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
+branches:
+  only:
+  - master
+env:
+  global:
+  - GH_REF: github.com/StevenHugo/StevenHugo.github.io.git
+  - secure: Wccb9VyiGc29+OJnvSTLe6qBaTzEYgKRfqv2U+hMnKZEhNEQ72MvcukRwAQ9M7AaEdyyC5xmXKrG1pkkNeTLf3vvIOvInr2LDJ6zzViYXAQh4Q+DZ60SrfASUHMIKvFNNAwM/d6fh9QYIV/WpwnES5ylzMeVT1O47MAspZKzsZjDFSoL0Afldep5kgO1mLJCujwci51yk1dakE0ZlKDVcfvZePLfM60c0npyyZM62zIefZs0Yyo1IGCa3VokFTAeRJm5ht4Ap05KsDsto4hiRzQjLk5eCLz0kMN5YFb0i9DgJM8GS1t1s1t+iSXhyyGXFRxiS1thn8oWHebo67KH+5oNLPJpO/E1I0Wi0LZYc7cfsRnniMBV+4az8eIdKOH72iBdDer7bQ3IoeDKQQgaIekHOB04wajg9efrXLp5Puzk8wcSttl6Pol6jugEvDLPfHTNf8Ngb88v4Zink9Vuic5Fys4HmGvOnFm7wte0Vi0UrZq9ScVy2pU0uQKreH0C8u0XVBhnvbDVHlvz8HGALJgo3h+eL3yvyntzPcKsfyBotmRdVc0laqR98vIiWC0gsyU5/M2PSUNvj33oIb3Oih5wpu4UM0DYsfMiy5ZabphQTn0CDwHNwg269rTqKcpvkOh0wfBJg57rjJxG83ei4qnoEFxSabugmFG0pZWOZ2E=

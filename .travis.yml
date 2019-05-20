@@ -1,12 +1,12 @@
-language: go
-go:
-- master
 install:
-- go get github.com/spf13/hugo
+- wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p;q}}' | xargs wget
+- sudo dpkg -i hugo*.deb
+- rm -rf public 2> /dev/null
 - chmod u+x deploy.sh
-before_script: 
+
 script:
 - sh deploy.sh
+
 after_script:
 - cd public
 - git init
@@ -15,9 +15,11 @@ after_script:
 - git add -A
 - git commit -m "Update"
 - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
+
 branches:
   only:
   - master
+
 env:
   global:
   - GH_REF: github.com/StevenHugo/stevenhugo.github.io.git
